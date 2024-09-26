@@ -1,4 +1,4 @@
-let currentPlayer = "X";
+let currentPlayer = "X"; // X will be the player, O will be the PC
 let board = ["", "", "", "", "", "", "", "", ""];
 let gameActive = true;
 
@@ -17,8 +17,32 @@ function makeMove(index) {
         document.getElementById(`cell-${index}`).style.pointerEvents = "none"; // Disable further clicks on the cell
         checkWinner();
         if (gameActive) {
-            currentPlayer = currentPlayer === "X" ? "O" : "X";
-            statusDisplay.textContent = `Player ${currentPlayer}'s turn`;
+            currentPlayer = "O"; // Switch to PC
+            statusDisplay.textContent = `Player O's (PC) turn`;
+            setTimeout(pcMove, 500); // Give the PC half a second to make a move
+        }
+    }
+}
+
+function pcMove() {
+    if (!gameActive) return; // If the game is over, don't make a move
+
+    let availableMoves = [];
+    for (let i = 0; i < 9; i++) {
+        if (board[i] === "") {
+            availableMoves.push(i); // Collect all available moves
+        }
+    }
+
+    if (availableMoves.length > 0) {
+        let randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        board[randomMove] = "O";
+        document.getElementById(`cell-${randomMove}`).textContent = "O";
+        document.getElementById(`cell-${randomMove}`).style.pointerEvents = "none"; // Disable further clicks on the cell
+        checkWinner();
+        if (gameActive) {
+            currentPlayer = "X"; // Switch back to player
+            statusDisplay.textContent = `Player X's turn`;
         }
     }
 }
